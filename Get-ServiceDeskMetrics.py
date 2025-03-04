@@ -94,11 +94,15 @@ call_counts.loc[call_counts['DeviceName'] == voicemail_server, 'Description'] = 
 call_counts['Description'] = call_counts['Description'].fillna("Unknown")
 
 #### Retrieve phone numbers for devices using AXL API
-for index, row in call_counts.iterrows():
-    device = row['DeviceName']
+# Dictionary to store updates (index: phone_number)
+updates = {}
+# Iterate over DataFrame rows efficiently using .itertuples()
+# index=True ensures we retain the original DataFrame index for updates
+for row in call_counts.itertuples(index=True):
+    device = row.DeviceName  # Get the device name for the current row
     if device == voicemail_server:
-        call_counts.loc[index, 'PhoneNumber'] = "8888"
-        continue
+        updates[row.Index] = "8888"
+        continue  # Skip the API call for voicemail servers
     payload = f"""
         <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/14.0\">
             <soapenv:Header />
@@ -114,8 +118,9 @@ for index, row in call_counts.iterrows():
     root = etree.fromstring(responseText)
     phone_numbers = root.xpath("//ns:getPhoneResponse/return/phone/lines/line/dirn/pattern", namespaces=ns)
     phone_number = phone_numbers[0].text if phone_numbers else "Unknown"
-    call_counts.loc[index, 'PhoneNumber'] = phone_number
-
+    updates[row.Index] = phone_number
+# Apply all updates to the 'PhoneNumber' column in a single operation (faster than row-by-row modification)
+call_counts.loc[list(updates.keys()), 'PhoneNumber'] = list(updates.values())
 # Organize call counts data
 call_counts = call_counts.reindex(columns=['PhoneNumber', 'Description', 'DeviceName', 'CallCount'])
 call_counts = call_counts.sort_values(by='PhoneNumber', ascending=True)
