@@ -47,7 +47,8 @@ This Python script parses the Call Detail Record CSV file pulled from CUCM to pu
 ## **Usage**
 1. Clone the repository and navigate to the script directory.
 2. Update the Basic Auth in the headers variable (to facilitate logging into CUCM to pull device info)
-3. Run the script:
+3. Ensure the CDR.csv is in the same location as the script
+4. Run the script:
    ```bash
    python .\Get-ServiceDeskMetrics.py
    ```
