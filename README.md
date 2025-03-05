@@ -20,7 +20,7 @@ This Python script parses the Call Detail Record CSV file pulled from CUCM to pu
 ---
 
 ## **Workflow**
-1. **Download CDR.csv**  
+1. **Download cdr.csv**  
    
 2. **Parse CSV using Get-ServiceDeskMetrics.py**  
    
@@ -36,7 +36,7 @@ This Python script parses the Call Detail Record CSV file pulled from CUCM to pu
   - `requests`: For implementing API calls to CUCM
   
 - **Input Files:**  
-  - `CDR.csv`: Contains the entire log of calls made inside CUCM
+  - `cdr.csv`: Contains the entire log of calls made inside CUCM
 
 - **Output Files:**  
   - `evening_calls.txt`: Stores the date and time of any calls made to the service desk in the evening
@@ -47,7 +47,7 @@ This Python script parses the Call Detail Record CSV file pulled from CUCM to pu
 ## **Usage**
 1. Clone the repository and navigate to the script directory.
 2. Update the Basic Auth in the headers variable (to facilitate logging into CUCM to pull device info)
-3. Ensure the CDR.csv is in the same location as the script
+3. Ensure the cdr.csv is in the same location as the script
 4. Run the script:
    ```bash
    python .\Get-ServiceDeskMetrics.py
